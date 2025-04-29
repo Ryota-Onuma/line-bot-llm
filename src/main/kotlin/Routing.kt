@@ -110,15 +110,13 @@ fun Application.configureRouting() {
                     return@post
                 }
 
-                val llmResp = askLLM(message.text, defaultPrompt, "@cf/meta/llama-3-8b-instruct", cloudflareAccountID, cloudflareAccessToken)
+                val llmResp = askLLM(message.text, defaultPrompt, "@cf/meta/llama-3.1-8b-instruct-fast", cloudflareAccountID, cloudflareAccessToken)
                 val llmRespBody = llmResp.body<String>()
                 val json = Json { ignoreUnknownKeys = true }
                 val llmResponse = json.decodeFromString<LLMResponse>(llmRespBody)
-                println(llmResponse.result.response)
 
                 val resp = replyMessage(llmResponse.result.response, lineAccessToken, events[0].replyToken)
                 val body = resp.body<String>()
-                println("LINE API レスポンス: ${body}")
                 
             } catch (e: Exception) {
                 println(e)
@@ -130,3 +128,4 @@ fun Application.configureRouting() {
         }
     }
 }
+
