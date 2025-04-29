@@ -9,6 +9,7 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import com.example.model.*
+import com.example.request.*
 import io.ktor.server.http.content.staticResources
 
 fun Application.configureRouting() {
@@ -84,6 +85,11 @@ fun Application.configureRouting() {
         }
         post("/line") {
             println("/line called")
+            val requestBody = call.receiveText()
+            println("Request body: $requestBody")
+            val formContent = call.receive<LineRequest>()
+            println("Parsed content: $formContent")
+            call.respond(HttpStatusCode.OK)
        }
     }
 }
