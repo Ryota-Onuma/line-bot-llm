@@ -92,9 +92,6 @@ fun Application.configureRouting() {
             val accessToken = config.property("line.channel_access_token").getString()
 
             try {
-                val rawRequestBody = call.receiveText()
-                println("Parsed content: $rawRequestBody")
-
                 val webhookRequestBody = call.receive<WebhookRequestBody>()
                 println("Parsed content: $webhookRequestBody")
                 val events = webhookRequestBody.events
