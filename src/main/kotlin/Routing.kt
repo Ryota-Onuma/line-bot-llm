@@ -14,8 +14,7 @@ import line.*
 import llm.*
 import io.ktor.server.http.content.staticResources
 import io.ktor.client.call.*
-
-
+import kotlinx.serialization.json.Json
 
 fun Application.configureRouting() {
     install(DoubleReceive)
@@ -113,9 +112,11 @@ fun Application.configureRouting() {
 
                 val llmResp = askLLM(message.text, defaultPrompt, "@cf/meta/llama-3-8b-instruct", cloudflareAccountID, cloudflareAccessToken)
                 val llmRespBody = llmResp.body<String>()
-                println(llmRespBody)
+                val json = Json { ignoreUnknownKeys = true }
+                val llmResponse = json.decodeFromString<LLMResponse>(llmRespBody)
+                println(llmResponse.result.response)
 
-                val resp = replyMessage(llmRespBody, lineAccessToken, events[0].replyToken)
+                val resp = replyMessage(llmResponse.result.response, lineAccessToken, events[0].replyToken)
                 val body = resp.body<String>()
                 println("LINE API レスポンス: ${body}")
                 
