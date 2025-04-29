@@ -4,7 +4,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class LineRequest(
-    val events: List<Event>
+    val events: List<Event>,
+    val destination: String? = null
 )
 
 @Serializable
