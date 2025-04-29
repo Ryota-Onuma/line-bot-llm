@@ -38,7 +38,7 @@ suspend fun replyMessage(
         )
     )
 
-    return client.post(PUSH_API_ENDPOINT) {
+    return client.post(REPLY_API_ENDPOINT) {
         contentType(ContentType.Application.Json)
         headers {
             append(HttpHeaders.Authorization, "Bearer $accessToken")
