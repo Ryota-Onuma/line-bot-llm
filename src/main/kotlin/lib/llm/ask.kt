@@ -29,6 +29,8 @@ suspend fun askLLM(
         Message(role="user", content=message)
     )
 
+    val requestBody = LLMRequestBody(messages)
+
     val CLOUDFLARE_API_ENDPOINT = "https://api.cloudflare.com/client/v4/accounts/$accountId/ai/run/$model"
 
     val resp = client.post(CLOUDFLARE_API_ENDPOINT) {
@@ -36,11 +38,16 @@ suspend fun askLLM(
         headers {
             append(HttpHeaders.Authorization, "Bearer $accessToken")
         }
-        setBody(messages)
+        setBody(requestBody)
     }
 
     return resp
 }
+
+@Serializable
+data class LLMRequestBody(
+    val messages: List<Message>
+)
 
 @Serializable
 data class Message(

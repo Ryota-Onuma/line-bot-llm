@@ -121,6 +121,8 @@ fun Application.configureRouting() {
                 
             } catch (e: Exception) {
                 println(e)
+                val rawRequestBody = call.receiveText()
+                println("Parsed content: $rawRequestBody")
             }
 
             call.respond(HttpStatusCode.OK)
