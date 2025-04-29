@@ -91,21 +91,28 @@ fun Application.configureRouting() {
             val config = environment.config
             val accessToken = config.property("line.channel_access_token").getString()
 
-            // 個人利用なのでRoomIDは固定
-            val roomID = config.property("line.room_id").getString()
             try {
-                val requestBody = call.receiveText()
-                println("Request body: $requestBody")
-                val formContent = call.receive<WebhookRequestBody>()
-                println("Parsed content: $formContent")
+                val webhookRequestBody = call.receive<WebhookRequestBody>()
+                println("Parsed content: $webhookRequestBody")
+                val events = webhookRequestBody.events
+                if (events.size == 0){
+                    call.respond(HttpStatusCode.OK)
+                }
+                val message = events[0].message
+                if (message == null) {
+                    call.respond(HttpStatusCode.OK)
+                }
+
+                val msg = message?.text + "と受け取った"
+
+                val resp = replyMessage(msg, accessToken, events[0].replyToken)
+                val body = resp.body<String>()
+                println("LINE API レスポンス: ${body}")
                 
             } catch (e: Exception) {
                 println(e)
             }
 
-            val resp = pushMessage("Hello", accessToken, roomID)
-            val body = resp.body<String>()
-            println("LINE API レスポンス: ${body}")
             call.respond(HttpStatusCode.OK)
         }
     }

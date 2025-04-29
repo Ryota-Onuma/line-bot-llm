@@ -12,8 +12,7 @@ data class WebhookRequestBody(
 data class Event(
     val type: String,
     val message: Message? = null,
-    val source: Source? = null,
-    val timestamp: Long? = null
+    val replyToken: String
 )
 
 @Serializable
@@ -22,8 +21,3 @@ data class Message(
     val text: String
 )
 
-@Serializable
-data class Source(
-    val type: String,
-    val userId: String? = null
-)

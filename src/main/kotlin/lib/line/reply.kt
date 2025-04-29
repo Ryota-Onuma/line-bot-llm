@@ -11,19 +11,19 @@ import io.ktor.serialization.kotlinx.json.*
 import io.ktor.http.*
 
 
-const val PUSH_API_ENDPOINT = "https://api.line.me/v2/bot/message/push"
+const val REPLY_API_ENDPOINT = "https://api.line.me/v2/bot/message/reply"
 
 /**
  * LINE にプッシュ送信する汎用関数。
  *
  * @param message 送るテキスト
  * @param accessToken `line.channel_access_token` の値
- * @param roomID `line.room_id` の値
+ * @param replyToken
  */
-suspend fun pushMessage(
+suspend fun replyMessage(
     message: String,
     accessToken: String,
-    roomID: String
+    replyToken: String
 ): HttpResponse {
     val client = HttpClient(CIO) {
         install(ContentNegotiation) {
@@ -31,8 +31,8 @@ suspend fun pushMessage(
         }
     }
 
-    val reqBody = LinePushRequestBody(
-        to = roomID,
+    val reqBody = LineReplyRequestBody(
+        replyToken=replyToken,
         messages = listOf(
             Message(type = "text", text = message)
         )
@@ -49,13 +49,7 @@ suspend fun pushMessage(
 
 
 @Serializable
-data class LinePushRequestBody(
-    val to: String,
+data class LineReplyRequestBody(
+    val replyToken: String,
     val messages: List<Message>
-)
-
-@Serializable
-data class Message(
-    val type: String,
-    val text: String
 )
