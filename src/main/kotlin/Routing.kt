@@ -1,4 +1,4 @@
-package com.example
+package `line-bot-llm`
 
 import io.github.cotrin8672.LineWebhook
 import io.ktor.http.*
@@ -8,9 +8,13 @@ import io.ktor.server.plugins.openapi.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import com.example.model.*
-import com.example.request.*
+import model.*
+import request.*
+import line.*
 import io.ktor.server.http.content.staticResources
+import io.ktor.client.call.*
+
+
 
 fun Application.configureRouting() {
     install(DoubleReceive)
@@ -84,12 +88,25 @@ fun Application.configureRouting() {
             }
         }
         post("/line") {
-            println("/line called")
-            val requestBody = call.receiveText()
-            println("Request body: $requestBody")
-            val formContent = call.receive<LineRequest>()
-            println("Parsed content: $formContent")
+            val config = environment.config
+            val accessToken = config.property("line.channel_access_token").getString()
+
+            // 個人利用なのでRoomIDは固定
+            val roomID = config.property("line.room_id").getString()
+            try {
+                val requestBody = call.receiveText()
+                println("Request body: $requestBody")
+                val formContent = call.receive<WebhookRequestBody>()
+                println("Parsed content: $formContent")
+                
+            } catch (e: Exception) {
+                println(e)
+            }
+
+            val resp = pushMessage("Hello", accessToken, roomID)
+            val body = resp.body<String>()
+            println("LINE API レスポンス: ${body}")
             call.respond(HttpStatusCode.OK)
-       }
+        }
     }
 }

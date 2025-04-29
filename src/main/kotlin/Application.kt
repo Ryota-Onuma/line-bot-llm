@@ -1,4 +1,4 @@
-package com.example
+package `line-bot-llm`
 
 import io.ktor.server.application.*
 import io.ktor.server.plugins.contentnegotiation.*

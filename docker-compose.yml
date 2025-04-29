@@ -13,4 +13,6 @@ services:
       KTOR_DEVELOPMENT: true
       LINE_CHANNEL_SECRET: hoge
       LINE_CHANNEL_TOKEN: fuga
+      LINE_CHANNEL_ACCESS_TOKEN: ${LINE_CHANNEL_ACCESS_TOKEN-token}
+      LINE_ROOM_ID: ${LINE_ROOM_ID-id}
       JAVA_TOOL_OPTIONS: -Dio.ktor.development=true

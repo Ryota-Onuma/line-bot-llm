@@ -1,7 +1,7 @@
 ktor:
   application:
     modules:
-      - com.example.ApplicationKt.module
+      - line-bot-llm.ApplicationKt.module
   deployment:
     port: 8080
     watch:
@@ -9,6 +9,8 @@ ktor:
       - resources
   development: $KTOR_DEVELOPMENT
 line:
+  channel_access_token: $LINE_CHANNEL_ACCESS_TOKEN
+  room_id: $LINE_ROOM_ID
   channel:
     secret: $LINE_CHANNEL_SECRET
     token: $LINE_CHANNEL_TOKEN

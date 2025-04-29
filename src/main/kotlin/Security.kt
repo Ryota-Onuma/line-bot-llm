@@ -1,4 +1,4 @@
-package com.example
+package `line-bot-llm`
 
 import io.github.cotrin8672.LineWebhook
 import io.ktor.http.*

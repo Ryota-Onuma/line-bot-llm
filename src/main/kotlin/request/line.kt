@@ -1,9 +1,9 @@
-package com.example.request
+package request
 
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class LineRequest(
+data class WebhookRequestBody(
     val events: List<Event>,
     val destination: String? = null
 )
@@ -19,7 +19,7 @@ data class Event(
 @Serializable
 data class Message(
     val type: String,
-    val text: String? = null
+    val text: String
 )
 
 @Serializable
