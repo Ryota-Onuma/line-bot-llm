@@ -14,3 +14,8 @@ line:
   channel:
     secret: $LINE_CHANNEL_SECRET
     token: $LINE_CHANNEL_TOKEN
+cloudflare:
+  account_id: $CLOUDFLARE_ACCOUND_ID
+  access_token: $CLOUDFLARE_ACCESS_TOKEN
+  llm:
+    defalut_prompt: $LLM_DEFAULT_PROMPT

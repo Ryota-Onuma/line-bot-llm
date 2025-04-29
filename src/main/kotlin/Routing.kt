@@ -11,6 +11,7 @@ import io.ktor.server.routing.*
 import model.*
 import request.*
 import line.*
+import llm.*
 import io.ktor.server.http.content.staticResources
 import io.ktor.client.call.*
 
@@ -89,7 +90,12 @@ fun Application.configureRouting() {
         }
         post("/line") {
             val config = environment.config
-            val accessToken = config.property("line.channel_access_token").getString()
+            val lineAccessToken = config.property("line.channel_access_token").getString()
+            val cloudflareAccountID = config.property("cloudflare.account_id").getString()
+            val cloudflareAccessToken = config.property("cloudflare.access_token").getString()
+
+            // 恥ずかしいので環境変数経由にして隠す
+            val defaultPrompt = config.property("cloudflare.llm.defalut_prompt").getString()
 
             try {
                 val webhookRequestBody = call.receive<WebhookRequestBody>()
@@ -105,9 +111,11 @@ fun Application.configureRouting() {
                     return@post
                 }
 
-                val msg = message?.text + "と受け取った"
+                val llmResp = askLLM(message.text, defaultPrompt, "@cf/meta/llama-3-8b-instruct", cloudflareAccountID, cloudflareAccessToken)
+                val llmRespBody = llmResp.body<String>()
+                println(llmRespBody)
 
-                val resp = replyMessage(msg, accessToken, events[0].replyToken)
+                val resp = replyMessage(llmRespBody, lineAccessToken, events[0].replyToken)
                 val body = resp.body<String>()
                 println("LINE API レスポンス: ${body}")
                 
