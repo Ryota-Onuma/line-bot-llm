@@ -92,15 +92,20 @@ fun Application.configureRouting() {
             val accessToken = config.property("line.channel_access_token").getString()
 
             try {
+                val rawRequestBody = call.receiveText()
+                println("Parsed content: $rawRequestBody")
+
                 val webhookRequestBody = call.receive<WebhookRequestBody>()
                 println("Parsed content: $webhookRequestBody")
                 val events = webhookRequestBody.events
                 if (events.size == 0){
                     call.respond(HttpStatusCode.OK)
+                    return@post
                 }
                 val message = events[0].message
                 if (message == null) {
                     call.respond(HttpStatusCode.OK)
+                    return@post
                 }
 
                 val msg = message?.text + "と受け取った"
