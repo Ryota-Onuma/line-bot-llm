@@ -4,13 +4,13 @@ services:
       - .:/app/
     build:
       context: .
-      dockerfile: ./Dockerfile
+      dockerfile: ./Dockerfile.dev
     ports:
       - "8080:8080"
     tty: true
     stdin_open: true
     environment:
+      KTOR_DEVELOPMENT: true
       LINE_CHANNEL_SECRET: hoge
       LINE_CHANNEL_TOKEN: fuga
       JAVA_TOOL_OPTIONS: -Dio.ktor.development=true
-      KTOR_DEVELOPMENT: "true"
